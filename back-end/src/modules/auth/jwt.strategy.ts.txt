@@ -1,0 +1,38 @@
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PassportStrategy } from '@nestjs/passport';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UsersService } from '../users/users.service';
+
+/**
+ * JWT authentication strategy.
+ * @class
+ */
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+    /**
+     * Creates an instance of JwtStrategy.
+     * @param {UsersService} userService - The user service.
+     */
+    constructor(private readonly userService: UsersService) {
+        super({
+             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+             ignoreExpiration: false,
+             secretOrKey: process.env.JWTKEY,
+        });
+    }
+
+    /**
+     * Validates and retrieves the user from the JWT payload.
+     * @param {any} payload - The JWT payload.
+     * @returns {Promise<any>} - A promise resolving to the validated payload if successful.
+     * @throws {UnauthorizedException} - Throws an unauthorized exception if the user does not exist.
+     */
+    async validate(payload: any) {
+        // check if user in the token actually exist
+        const user = await this.userService.findOneById(payload.id);
+        if (!user) {
+            throw new UnauthorizedException('You are not authorized to perform the operation');
+        }
+        return payload;
+    }
+}

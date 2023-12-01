@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  development:
+    profiles: ["development"]
+    image: postgres:15
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: sifokab-vitrine
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: krws-dev
+      POSTGRES_HOST_AUTH_METHOD: trust
+  test:
+    profiles: ["test"]
+    image: postgres:15
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: sifokab-vitrine
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: krws-test
+      POSTGRES_HOST_AUTH_METHOD: trust
