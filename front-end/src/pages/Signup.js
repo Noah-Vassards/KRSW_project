@@ -74,7 +74,7 @@ function SignUp() {
       <header className="App-header">
         <label className='head'>KRSW Project</label>
       </header>
-      <body className='App-Body'>
+      <div className='App-Body'>
         <form className='Form-Block' onSubmit={handleSubmit}>
           <label className="Title">Sign up</label>
           <input type='text' placeholder={"Enter your email"} value={email} onInput={e => setEmail(e.target.value)}></input>
@@ -89,7 +89,7 @@ function SignUp() {
           <button type='submit' disabled={!canSubmit}>Sign up</button>
           <label><Link className="redirect" to="/login">Login</Link> instead</label>
         </form>
-      </body>
+      </div>
       <Outlet />
     </div>
 

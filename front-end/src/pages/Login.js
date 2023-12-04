@@ -61,20 +61,18 @@ function Login() {
 
   return (
     <div className="App">
-      <div className="App">
-        <header className="App-header">
-          <label className='head'>KRSW Project</label>
-        </header>
-        <body className='App-Body' onSubmit={handleSubmit}>
-          <form className='Form-Block'>
-            <label className="Title">Login</label>
-            <input type='text' placeholder={"Enter your email"} value={email} onInput={e => setEmail(e.target.value)}></input>
-            <input type='password' placeholder={"Enter your password"} value={pass} onInput={e => setPass(e.target.value)}></input>
-            {!user ? <label className="alert">User unknown</label> : null}
-            <button type='submit' disabled={emptyInput}>Sign up</button>
-            <label><Link className="redirect" to="/signup">Sign up</Link> instead</label>
-          </form>
-        </body>
+      <header className="App-header">
+        <label className='head'>KRSW Project</label>
+      </header>
+      <div className='App-Body' onSubmit={handleSubmit}>
+        <form className='Form-Block'>
+          <label className="Title">Login</label>
+          <input type='text' placeholder={"Enter your email"} value={email} onInput={e => setEmail(e.target.value)}></input>
+          <input type='password' placeholder={"Enter your password"} value={pass} onInput={e => setPass(e.target.value)}></input>
+          {!user ? <label className="alert">User unknown</label> : null}
+          <button type='submit' disabled={emptyInput}>Sign up</button>
+          <label><Link className="redirect" to="/signup">Sign up</Link> instead</label>
+        </form>
       </div>
       <Outlet />
     </div>
