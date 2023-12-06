@@ -18,7 +18,6 @@ function Recommendations() {
     const navigate = useNavigate()
     const [max, setMax] = useState(5)
     const [resizedArr, setResizedArr] = useState([])
-    let userEmail = null
 
     const movies = [
         { match: 5, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
@@ -50,16 +49,16 @@ function Recommendations() {
     ].sort((a, b) => { return b.rank - a.rank })
 
     useEffect(() => {
-        userEmail = Cookies.get('userEmail')
+        const userEmail = Cookies.get('userEmail')
         console.log(userEmail)
         if (!userEmail) {
             navigate('/login')
         }
-    }, [navigate, userEmail])
+    }, [navigate])
 
     useEffect(() => {
         setResizedArr(movies.slice(0, max))
-    }, [max])
+    }, [max, movies])
 
     const handleSeeMore = () => {
         if (max + 5 > movies.length) {

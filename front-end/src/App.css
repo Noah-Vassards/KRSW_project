@@ -50,8 +50,6 @@
 
 .Header {
   height: 20vh;
-  top: 0;
-  position: fixed;
   z-index: 1;
 }
 
@@ -62,12 +60,14 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-evenly;
+  top: 0;
   /* border-color: red;
   border-width: 1px;
   border-style: solid; */
 }
 
 .Right {
+  position: fixed;
   right: 0;
   width: 50vw;
   display: flex;
@@ -132,8 +132,9 @@
   border-color: black;
   border-width: 1px;
   border-style: solid;
-  height: 100px;
-  width: 80vw;
+  /* box-shadow: 10px 10px 4px -4px black, -10px -10px 4px -4px black; */
+  height: 70%;
+  width: 50vw;
 }
 
 .Shadow-Box {
@@ -150,6 +151,61 @@
   font-weight: bold;
 }
 
+.Header-Popup {
+  margin: 10px;
+  display: flex;
+  /* justify-content: space-around; */
+}
+
+.Movie-Title {
+  font-size: x-large;
+}
+
+.Movies-Wrapper {
+  position: relative;
+  width: 100%;
+  /* border-color: violet;
+  border-width: 1px;
+  border-style: solid; */
+}
+
+.Movies-Select {
+  left: 50%; 
+  transform: translate(-50%, 0);
+  min-width: 200px;
+  max-width: 50%;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  position: absolute;
+  z-index: 1;
+  border-width: 1px;
+  border-color: white;
+  border-style: solid;
+  border-radius: 4px;
+}
+
+.Movie-Choice {
+  background-color: #282c34;
+  color: white;
+  border: none;
+  border-bottom: 1px;
+  border-bottom-style: solid;
+  border-color: white;
+  font-size: 15px;
+  height: 40px;
+  overflow: hidden;
+  align-items: center;
+  text-wrap: nowrap;
+}
+
+.Popup-Body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .transparent {
   background-color: transparent;
   border-color: transparent;
@@ -157,6 +213,23 @@
 
 .rounded {
   border-radius: 10px;
+}
+
+.top {
+  top: 0;
+  position: fixed;
+}
+
+.right {
+  position: relative !important;
+  justify-content: flex-end;
+}
+
+.center {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 #See-More {
@@ -177,6 +250,7 @@
 
 #Add-Movie {
   font-size: 30px;
+  cursor: inherit;
 }
 
 ::-webkit-scrollbar {
