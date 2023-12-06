@@ -11,14 +11,13 @@ const sparqlQueryMovie = (movieTitle) => `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     
-    SELECT DISTINCT ?movie ?title ?director (GROUP_CONCAT(?actor; separator=", ") AS ?actors)
+    SELECT DISTINCT ?movie ?title (GROUP_CONCAT(?director; separator=", ") AS ?directors) (GROUP_CONCAT(?date; separator=", ") AS ?dates) (GROUP_CONCAT(?actor; separator=", ") AS ?actors)
     WHERE {
       ?movie rdf:type dbo:Film;
              rdfs:label ?title;
              dbo:director ?director;
              dbo:starring ?actor;
-             dbo:gross ?grossLiteral;
-             dbo:releaseDate ?date.
+             dbo:gross ?grossLiteral.
       BIND(xsd:double(?grossLiteral) AS ?gross)
       FILTER (
         regex(?title, "${movieTitle}", "i") &&
@@ -50,7 +49,7 @@ const requestMovies = async (movieTitle) => {
         }
         console.log("success", response.status)
         console.log('data', data)
-        const results = data.results.bindings.map((result) => { return { title: result.title.value, uri: result.movie.value, actors: result.actors.value.split(', '), director: result.director.value } })
+        const results = data.results.bindings.map((result) => { return { title: result.title.value, uri: result.movie.value, actors: result.actors.value.split(', '), directors: result.directors.value.split(', ') } })
         console.log('results', results)
         return results
     }
