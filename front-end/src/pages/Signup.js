@@ -6,7 +6,7 @@ import "../App.css";
 async function SendForm(email, password) {
   console.log('here')
   try {
-    const response = await fetch('http://localhost:3001/account/signup', {
+    const response = await fetch('http://192.168.1.31:3001/account/signup', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -19,7 +19,7 @@ async function SendForm(email, password) {
     })
     if (response.status !== 201) {
       const message = await response.json().then(json => json)
-      console.error('failed', message.message)
+      console.error('ERROR:', message.message)
       return false
     } else {
       return true

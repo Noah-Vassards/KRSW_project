@@ -127,6 +127,7 @@
 }
 
 .Vignette-Popup {
+  padding-bottom: 10px;
   background-color: #282c34;
   border-radius: 5px;
   border-color: black;
@@ -162,23 +163,25 @@
 }
 
 .Movies-Wrapper {
-  position: relative;
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   /* border-color: violet;
   border-width: 1px;
   border-style: solid; */
 }
 
 .Movies-Select {
-  left: 50%; 
-  transform: translate(-50%, 0);
+  position: absolute;
+  transform: translate(0, 70px);
   min-width: 200px;
   max-width: 50%;
   width: fit-content;
   display: flex;
   flex-direction: column;
   justify-items: center;
-  position: absolute;
   z-index: 1;
   border-width: 1px;
   border-color: white;
@@ -203,7 +206,89 @@
 .Popup-Body {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: calc(80vh * 0.7);
+}
+
+.Movie-Infos {
+  display: grid;
+  gap: 10px;
+  place-content: flex-start;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-areas: 
+  "tl tl tl tl tl tl tl tl"
+  "ac ac ac ac dr dr dr dr";
+  width: 80%;
+  height: 50%;
+  background-color: black;
+}
+
+.Title-Box {
+  width: 100%;
+  height: 70%;
+}
+
+.Name-List {
+  display: grid;
+  max-height: 30vh;
+  gap: 5px;
+  padding: 5px;
+  overflow: auto;
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  height: 80%;
+}
+
+.Popup-Confirm-Button {
+  margin: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.Rating {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  font-size: 100px;
+}
+
+.Rating > label {
+  font-size: 16px;
+}
+
+.Confirm-Button {
+  font-size: large;
+  background-color: green;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 4px;
+}
+
+.Close-Button {
+  float: right;
+  margin: 5px;
+  background: none;
+  border: none;
+  font-size: large;
+  font-weight: bold;
+}
+
+.Close-Button:hover {
+  color: #555;
+}
+
+.Grid-Wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center ;
+  font-weight: bolder;
 }
 
 .transparent {
@@ -251,6 +336,20 @@
 #Add-Movie {
   font-size: 30px;
   cursor: inherit;
+}
+
+#title {
+  grid-area: tl;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#actors {
+  grid-area: ac;
+}
+
+#directors {
+  grid-area: dr;
 }
 
 ::-webkit-scrollbar {
@@ -341,7 +440,7 @@ label.Title {
   font-size: 30px;
 }
 
-label {
+label.Body {
   align-self: flex-start;
   font-size: 16px;
 }

@@ -6,7 +6,7 @@ import "../App.css";
 async function SendForm(email, password) {
   console.log('here')
   try {
-    const response = await fetch('http://localhost:3001/account/login', {
+    const response = await fetch('http://192.168.1.31:3001/account/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
