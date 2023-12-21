@@ -3,6 +3,8 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { UserDto } from '../users/dto/user.dto';
 import { User } from '../users/user.entity';
+import { MoviesService } from '../movies/movies.service';
+import * as fs from 'fs/promises'
 
 /**
  * Service responsible for authentication-related operations.
@@ -12,6 +14,7 @@ import { User } from '../users/user.entity';
 export class AuthService {
     constructor(
         private readonly userService: UsersService,
+        private readonly moviesService: MoviesService,
     ) { }
 
     /**
@@ -102,8 +105,22 @@ export class AuthService {
         // hash the password
         const pass = await this.hashPassword(user.password);
 
+        const defaultJson = {
+            "@context": {
+                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+                "xsd": "http://www.w3.org/2001/XMLSchema#",
+                "dbo": "http://dbpedia.org/ontology/",
+                "user": "http://example.org/ontology/user#"
+            },
+            "@type": "ItemList",
+            "itemListElement": []
+        }
+
         // create the user
-        const newUser = await this.userService.create({ ...user, password: pass });
+        console.log('creating user')
+        const newUser = await this.userService.create({ ...user, password: pass, movies: defaultJson });
+        console.log('user created')
 
         // tslint:disable-next-line: no-string-literal
         const { password, ...result } = newUser['dataValues'];

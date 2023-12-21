@@ -23,7 +23,7 @@ export class UsersService {
      * @param {UserDto} user - The user data.
      * @returns {Promise<User>} - A promise resolving to the created user.
      */
-    async create(user: UserDto): Promise<User> {
+    async create(user): Promise<User> {
         return await this.userRepository.create<User>(user);
     }
 
@@ -64,5 +64,10 @@ export class UsersService {
 
     async deleteAll() {
         return await this.userRepository.destroy()
+    }
+
+    async movies(email: string) {
+        const result = await this.userRepository.findOne<User>({ where: { email } })
+        return result.movies.itemListElement
     }
 }

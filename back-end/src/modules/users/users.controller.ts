@@ -13,6 +13,13 @@ export class UsersController {
         return await this.usersService.delete(req.query.email || req.body.email)
     }
 
+    @UseGuards(DoesUserExist)
+    @Get('movies')
+    async getMovies(@Request() req) {
+        console.debug(req.query || req.body.email)
+        return await this.usersService.movies(req.query.email || req.body.email)
+    }
+
     @Get()
     async getAll(@Ip() ip) {
         if (ip !== '::1') {

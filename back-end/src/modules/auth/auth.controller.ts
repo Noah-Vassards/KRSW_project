@@ -38,10 +38,9 @@ export class AuthController {
     @UseGuards(DoesUserAlreadyExist)
     @Post('signup')
     async signUp(@Body() user: UserDto) {
-        // console.debug("user", user)
+        console.debug("user", user)
         // console.debug(user['token'])
-        const userInfo: UserDto = {email: user.email, password: user.password}
-        return await this.authService.create(userInfo);
+        return await this.authService.create(user);
     }
 
     /**

@@ -19,8 +19,9 @@ export class ValidateInputPipe extends ValidationPipe {
       } catch (e) {
          if (e instanceof BadRequestException) {
             throw new CustomBadRequestException(this.handleError("Bad user credentials"));
+         } else {
+            throw e;
          }
-         throw e;
       }
    }
 

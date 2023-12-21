@@ -22,12 +22,14 @@ export class DoesUserAlreadyExist implements CanActivate {
     async validateRequest(email: string) {
         console.log("HERE")
         if (!email) {
-            throw new BadRequestException('No email address provided') // to add to DoD
+            throw new BadRequestException('No email address provided')
         }
+        console.log("HERE")
         const userExist = await this.userService.findOneByEmail(email);
         if (userExist) {
             throw new BadRequestException('This email already exists');
         }
+        console.log("HERE")
         return true;
     }
 }
