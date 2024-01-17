@@ -58,12 +58,12 @@ export class UsersService {
      * @param {string} email - The email address of the user to delete
      */
     async delete(email: string): Promise<number> {
-        const users = await this.userRepository.findAll({ where: { email } })
-        return await this.userRepository.destroy({ where: { email } })
+        const users = await this.userRepository.findAll<User>({ where: { email } })
+        return await this.userRepository.destroy<User>({ where: { email } })
     }
 
     async deleteAll() {
-        return await this.userRepository.destroy()
+        return await this.userRepository.destroy<User>()
     }
 
     async movies(email: string) {
@@ -94,7 +94,7 @@ export class UsersService {
         console.debug('-----------------')
         user.movies = userMovies
         // const newUser = await user.save()
-        const newUser = await this.userRepository.update({ movies: userMovies }, { where: { email } })
+        const newUser = await this.userRepository.update<User>({ movies: userMovies }, { where: { email } })
         console.log(newUser)
     }
 
