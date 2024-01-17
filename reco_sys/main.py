@@ -22,7 +22,7 @@ def get_reco(email: str):
             'route': 'movies'
         }
         return Response(json.dumps(message), status=401, mimetype='application/json')
-    userMovies = eval(response.content.decode())
+    userMovies: list = eval(response.content.decode())
     response = requests.get('http://localhost:3001/users/allMovies')
     if response.status_code != 200:
         message = {
@@ -32,7 +32,7 @@ def get_reco(email: str):
         }
         return Response(json.dumps(message), status=401, mimetype='application/json')
     allMovies = eval(response.content.decode())
-    newMovies = [movie for movie in allMovies if movie not in userMovies]
+    newMovies = [movie for movie in allMovies if all(movie['dbo:title'] != userMovie['dbo:title'] for userMovie in userMovies)]
     
     genres = set(genre for movie in userMovies for genre in movie['movie:genre'])
     favoriteGenre = [{'genre': genre, 'rating': 0} for genre in genres]
@@ -46,19 +46,15 @@ def get_reco(email: str):
                     break
 
     favoriteGenre.sort(key=lambda x: x['rating'], reverse=True)
-    print(favoriteGenre)
-
+    
     reco_scores = []
     for movie in newMovies:
-        print(movie['dbo:title'])
         score = 0
         for item in favoriteGenre:
             if item['genre'] in movie['movie:genre']:
                 score += 10 * item['rating']
-        print(score)
         reco_scores.append(score)
-    print(reco_scores)
-
+    
     reco_scores = normalize(reco_scores, 50, 99)
 
     for movie, score in zip(newMovies, reco_scores):
