@@ -304,7 +304,7 @@ function Home() {
         const res = await sendNewMovie(newMovie)
         if (!found && res) {
             const updatedMovies = [...movies, newMovie]
-            setMovies(updatedMovies.sort((a, b) => a.rank - b.rank))
+            setMovies(updatedMovies.sort((a, b) => b.rank - a.rank))
         }
     }
 
