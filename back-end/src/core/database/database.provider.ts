@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
+import { Movies } from 'src/modules/movies/movies.entity';
 import { User } from 'src/modules/users/user.entity';
 import { DEVELOPMENT, PRODUCTION, SEQUELIZE, TEST } from '../constants';
 import { databaseConfig } from './database.config';

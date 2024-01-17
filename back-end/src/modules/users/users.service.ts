@@ -68,6 +68,46 @@ export class UsersService {
 
     async movies(email: string) {
         const result = await this.userRepository.findOne<User>({ where: { email } })
+        console.debug(result)
+        console.log(result.movies.itemListElement)
         return result.movies.itemListElement
+    }
+
+    async newMovie(email: string, movie) {
+        const newMovie = {
+            "@id": movie.uri,
+            "@type": "dbo:Film",
+            "dbo:title": movie.title,
+            "user:Rating": movie.rank,
+            "dbo:starring": movie.actors,
+            "dbo:director": movie.directors,
+            "movie:thumbnail": movie.thumbnail,
+            "movie:genre": movie.genre
+        }
+        console.log(newMovie)
+        const user = await this.userRepository.findOne<User>({ where: { email } })
+        console.debug(user)
+        let userMovies = user.movies
+        userMovies.itemListElement = [...userMovies.itemListElement, newMovie]
+        console.debug('-----------------')
+        console.log(user.movies.itemListElement)
+        console.debug('-----------------')
+        user.movies = userMovies
+        // const newUser = await user.save()
+        const newUser = await this.userRepository.update({ movies: userMovies }, { where: { email } })
+        console.log(newUser)
+    }
+
+    async removeMovieByName(email: string, movieName: string) {
+        const user = await this.userRepository.findOne<User>({ where: { email } })
+        let userMovies = user.movies
+        const filteredMovies = userMovies.itemListElement.filter(movie => movie['dbo:title'] != movieName)
+        userMovies.itemListElement = filteredMovies
+        await this.userRepository.update({ movies: userMovies }, { where: { email } })
+    }
+
+    async allMovies() {
+        const result = await this.userRepository.findAll<User>()
+        return result.map((data) => data.movies.itemListElement).flat()
     }
 }

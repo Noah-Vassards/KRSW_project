@@ -1,0 +1,51 @@
+{
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dbo": "http://dbpedia.org/ontology/",
+    "user": "http://example.org/ontology/user#"
+  },
+  "@id": "http://example.org/movie#Movie",
+  "@type": "dbo:Film",
+  "dbo:title": {
+    "@id": "http://example.org/movie#title",
+    "@type": "rdf:Property",
+    "rdfs:label": "Title",
+    "rdfs:comment": "The title of the movie",
+    "rdfs:domain": "dbo:Film",
+    "rdfs:range": "xsd:string"
+  },
+  "dbo:releaseData": {
+    "@id": "http://dbpedia.org/ontology/releaseDate",
+    "@type": "rdf:Property",
+    "rdfs:label": "Release Date",
+    "rdfs:comment": "The release date of the movie",
+    "rdfs:domain": "dbo:Film",
+    "rdfs:range": "xsd:date"
+  },
+  "user:Rating": {
+    "@id": "http://example.org/user#",
+    "@type": "rdf:Property",
+    "rdfs:label": "User Rating",
+    "rdfs:comment": "The user rating of the movie",
+    "rdfs:domain": "dbo:Film",
+    "rdfs:range": "xsd:short"
+  },
+  "dbo:starring": {
+    "@id": "http://dbpedia.org/ontology/starring",
+    "@type": "rdf:Property",
+    "rdfs:label": "Starring",
+    "rdfs:comment": "The actors starring in the movie",
+    "rdfs:domain": "dbo:Film",
+    "rdfs:range": "dbo:Person"
+  },
+  "dbo:director": {
+    "@id": "http://dbpedia.org/ontology/director",
+    "@type": "rdf:Property",
+    "rdfs:label": "Director",
+    "rdfs:comment": "The director of the movie",
+    "rdfs:domain": "dbo:Film",
+    "rdfs:range": "dbo:Person"
+  }
+}
