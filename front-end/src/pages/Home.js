@@ -1,18 +1,63 @@
+import StarIcon from "@mui/icons-material/Star";
+import { Rating } from "@mui/material";
 import Cookies from "js-cookie";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import "../App.css";
-import profile from "../profile-icon.png"
-import { Rating, Stack } from "@mui/material";
+import profile from "../profile-icon.png";
 import debounce from "../utils/debounce";
-import StarIcon from "@mui/icons-material/Star";
+
+const getMovieDetails = async (movieTitle) => {
+    console.log('get movie details')
+    const response = await fetch(`http://www.omdbapi.com/?apikey=85915a66&t=${movieTitle}`)
+
+    if (response.status !== 200) {
+        console.log('failed')
+        return {}
+    } else {
+        const data = await response.json()
+        console.log('data', data)
+        const genre = data.Genre.split(', ')
+        const thumbnail = data.Poster
+        return { genre: genre, thumbnail: thumbnail }
+    }
+}
+
+const sendNewMovie = async (movie) => {
+    console.log('send new movie')
+    const response = await fetch('http://localhost:3001/users/newMovie', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email: Cookies.get('userEmail'),
+            movie: {
+                id: movie.uri,
+                title: movie.title,
+                actors: movie.actors,
+                directors: movie.directors,
+                rank: movie.rank,
+                genre: movie.genre,
+                thumbnail: movie.thumbnail
+            }
+        })
+    })
+    if (response.status !== 201) {
+        console.log(response.status)
+        return false
+    } else {
+        return true
+    }
+}
 
 const getUserMovies = async () => {
-    const response = await fetch('http://192.168.1.31:3001/users/movies?email=' + Cookies.get('userEmail'))
+    const response = await fetch('http://localhost:3001/users/movies?email=' + Cookies.get('userEmail'))
     const data = await response.json();
     if (response.status !== 200) {
         console.log(response.status)
-        throw new Error(data.message)
+        return false
 
     } else {
         console.log("success", response.status)
@@ -95,10 +140,6 @@ function AddMovie(props) {
         }
     }, 100), [])
 
-    useEffect(() => {
-        fetchMovies(movieTitle);
-    }, [movieTitle, fetchMovies])
-
 
     return (
         <div className="Popup-Wrapper">
@@ -106,7 +147,7 @@ function AddMovie(props) {
                 <button className="Close-Button" onClick={closePopup}>X</button>
                 <div className="Popup-Body">
                     <div className="Movies-Wrapper">
-                        <input type="text" className="Small" placeholder={"Enter film title"} value={movieTitle} onInput={e => setMovieTitle(e.target.value)}></input>
+                        <input type="text" className="Small" placeholder={"Enter film title"} value={movieTitle} onInput={e => { setMovieTitle(e.target.value); fetchMovies(movieTitle) }}></input>
                         {movies.length !== 0 ? <div className="Movies-Select">
                             {/* eslint-disable-next-line */}
                             {movies.map((movie, index) => <button className="Movie-Choice" key={index} onClick={() => { setSelectedMovie(movie), setMovies([]), setMovieTitle('') }}>{movie.title}</button>)}
@@ -141,9 +182,9 @@ function AddMovie(props) {
                                     <Rating
                                         name="rank select"
                                         value={selectedMovie.rank}
-                                        icon={<StarIcon fontSize="inherit"/>}
+                                        icon={<StarIcon fontSize="inherit" />}
                                         onChange={(event, newValue) => {
-                                            setSelectedMovie({...selectedMovie, rank: newValue})
+                                            setSelectedMovie({ ...selectedMovie, rank: newValue })
                                         }} />
                                 </div>
                                 <div className="Popup-Confirm-Button">
@@ -204,49 +245,34 @@ function Home() {
     const [showMenu, setShowMenu] = useState(false)
     const [selectedVignette, setSelectedVignette] = useState(null)
     const [movies, setMovies] = useState([])
-
-    // let movies = [
-    //     {id: 0, title: "title", rank: 5, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 1, title: "title", rank: 5, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 2, title: "title", rank: 3, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 3, title: "title", rank: 4, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 4, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 5, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 6, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 7, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 8, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 9, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 10, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 11, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 12, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 13, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 14, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 15, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 16, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 17, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 18, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 19, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 20, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 21, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 22, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 23, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 24, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    //     {id: 25, title: "title", rank: 1, image: "https://fr.web.img2.acsta.net/pictures/22/07/22/15/00/2862661.jpg" },
-    // ].sort((a, b) => { return b.rank - a.rank })
+    const isMounted = useRef(true)
 
     useEffect(() => {
-        const userEmail = Cookies.get('userEmail')
-        if (!userEmail) {
-            navigate('/login')
-        }
-    }, [navigate])
+        const init = async () => {
+            console.log('here')
+            const userEmail = Cookies.get('userEmail')
+            if (!userEmail) {
+                navigate('/login')
+            }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setMovies(await getUserMovies())
+
+            const userMovies = await getUserMovies()
+            console.log(userMovies)
+            if (!userMovies) {
+                navigate('/login')
+            } else {
+                userMovies.sort((a, b) => b['user:Rating'] - a['user:Rating'])
+                setMovies(userMovies)
+            }
         }
 
-        fetchData()
+        if (isMounted.current) {
+            init()
+        }
+
+        return () => {
+            isMounted.current = false
+        }
     }, [])
 
     const getMovieById = () => {
@@ -264,12 +290,21 @@ function Home() {
         console.log(movies)
     };
 
-    const handleSelectMovie = (newMovie) => {
+    const handleSelectMovie = async (newMovie) => {
         console.log('selected movie', newMovie)
         const found = movies.find(movie => movie.title === newMovie.title)
         console.log(found)
-        if (!found) {
-            setMovies([...movies, newMovie])
+        const movieDetails = await getMovieDetails(newMovie.title)
+        if (movieDetails.length === 0) {
+            console.log('error')
+            return
+        }
+        newMovie = { ...newMovie, ...movieDetails }
+        console.log(newMovie)
+        const res = await sendNewMovie(newMovie)
+        if (!found && res) {
+            const updatedMovies = [...movies, newMovie]
+            setMovies(updatedMovies.sort((a, b) => a.rank - b.rank))
         }
     }
 
@@ -279,7 +314,7 @@ function Home() {
                 <div className="Header Nav-Bar top">
                     <Link className="Nav-Link focus" to="/">Watched movies</Link>
                     <Link className="Nav-Link" to="/recommendations">Recommendations</Link>
-                    <Link className="Nav-Link" to="/">Quiz</Link>
+                    <Link className="Nav-Link" to="/quizz">Quiz</Link>
                 </div>
                 <div className="Header Right">
                     <input className="Small" type="text" placeholder="Search"></input>
@@ -295,7 +330,7 @@ function Home() {
                     <button className="Affiche" onClick={() => setShowMenu(true)}>
                         <label id="Add-Movie">Add movie</label>
                     </button>
-                    {movies.map((movie, index) => <Vignette key={index} id={movie.id} title={movie.title} rank={movie.rank} image={movie.image} onClick={(vignetteKey) => { setShowVignette(true); setSelectedVignette(vignetteKey) }} />)}
+                    {movies.map((movie, index) => <Vignette key={index} id={movie.id} title={movie.title || movie['dbo:title']} rank={movie.rank || movie['user:Rating']} image={movie.thumbnail || movie['movie:thumbnail']} onClick={(vignetteKey) => { setShowVignette(true); setSelectedVignette(vignetteKey) }} />)}
                 </div>
             </div>
             <Outlet />

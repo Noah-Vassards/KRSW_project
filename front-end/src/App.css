@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  /* justify-content: flex-start; */
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -220,7 +220,6 @@
   "ac ac ac ac dr dr dr dr";
   width: 80%;
   height: 50%;
-  background-color: black;
 }
 
 .Title-Box {
@@ -291,6 +290,69 @@
   font-weight: bolder;
 }
 
+.QuestionWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 80vh;
+}
+
+.Question {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AnswerGrid {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+  place-content: flex-start;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-areas: 
+  "fr fr fr fr sc sc sc sc"
+  "th th th th fo fo fo fo";
+  width: 80%;
+  height: 50%;
+}
+
+.Answer {
+  min-height: 40px;
+  border-radius: 4px;
+  border-color: transparent;
+  border-width: 1px;
+  background-color: #272727;
+  font-size: large;
+  color: white
+}
+
+.Answer:hover {
+  opacity: 0.8;
+}
+
+.Correct {
+  background-color: green;
+}
+
+.Incorrect {
+  background-color: red;
+}
+
+.Again {
+  margin-top: 15px;
+  height: 30px;
+  font-size: large;
+  border-radius: 4px;
+  background-color: #272727;
+  color: white;
+  border-color: transparent;
+}
+
+.Next:hover {
+  opacity: 0.8;
+}
+
 .transparent {
   background-color: transparent;
   border-color: transparent;
@@ -350,6 +412,22 @@
 
 #directors {
   grid-area: dr;
+}
+
+#first {
+  grid-area: fr;
+}
+
+#second {
+  grid-area: sc;
+}
+
+#third {
+  grid-area: th;
+}
+
+#fourth {
+  grid-area: fo;
 }
 
 ::-webkit-scrollbar {
