@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from './core/database/database.module';
-import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { MoviesModule } from './modules/movies/movies.module';
+import { DatabaseModule } from './core/database/database.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -12,7 +11,6 @@ import { MoviesModule } from './modules/movies/movies.module';
     DatabaseModule,
     UsersModule,
     AuthModule,
-    MoviesModule,
   ],
 })
 export class AppModule {}

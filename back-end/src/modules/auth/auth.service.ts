@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
 import { UserDto } from '../users/dto/user.dto';
 import { User } from '../users/user.entity';
-import { MoviesService } from '../movies/movies.service';
-import * as fs from 'fs/promises'
+import { UsersService } from '../users/users.service';
 
 /**
  * Service responsible for authentication-related operations.
@@ -14,7 +12,6 @@ import * as fs from 'fs/promises'
 export class AuthService {
     constructor(
         private readonly userService: UsersService,
-        private readonly moviesService: MoviesService,
     ) { }
 
     /**
